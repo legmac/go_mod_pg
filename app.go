@@ -1,28 +1,17 @@
-package main
+package mylogger
 
 import (
-	"context"
-	"fmt"
-	"os"
-
-	"github.com/jackc/pgx/v5"
+	"log"
 )
 
-func main() {
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
-	}
-	defer conn.Close(context.Background())
+func LogInfo(message string) {
+	log.Printf("INFO - %v", message)
+}
 
-	var name string
-	var weight int64
-	err = conn.QueryRow(context.Background(), "select name, weight from widgets where id=$1", 42).Scan(&name, &weight)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
-	}
+func LogWarning(message string) {
+	log.Printf("WARN - %v", message)
+}
 
-	fmt.Println(name, weight)
+func LogError(message string) {
+	log.Printf("ERROR - %v", message)
 }
